@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Excel
 {
-    class _26Converter
+    static class _26Converter
     {
         private static int _26system = 26;
         private static int start = 64;     // 64 в ASCII це '@' , 65 = 'A' ,  66 = 'B' і так далі
@@ -49,5 +49,26 @@ namespace Excel
 
             return answer - start;
         }
+
+
+        public static List<int> Split(string name)
+        {
+            int index = 0;
+
+            for (int i = 0; i < name.Length; ++i)
+            {
+                if (name[i] >= '0' && name[i] <= '9')
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            int columns = ConvertTo10(name.Substring(0, index));
+            int rows = Convert.ToInt32(name.Substring(index, name.Length - index));
+
+            return new List<int> { rows , columns }; ;
+        }
+
     }
 }

@@ -3,14 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Excel
 {
-    static class Grid
+    class Grid
     {
         public static Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
+
+        public static void ShowDependentCells(List<Cell> cellsToBeChanged , DataGridView Excel) // рекурсивно виводжу змінені залежні від залежних комірки
+        {
+            if (cellsToBeChanged != null)
+            {
+                if (cellsToBeChanged.Count != 0)
+                {
+                    foreach (Cell cel in cellsToBeChanged)
+                    {
+                        Excel[cel.Column, cel.Row].Value = cel.Value;
+                        ShowDependentCells(cel.CellsDependentOnMe, Excel);
+                    }
+                }
+            }
+        }
 
         public static void DeleteCellsFromDictionary(bool deleteColumn, int columns, int rows)
         {
@@ -50,14 +66,75 @@ namespace Excel
         }
 
 
-        public static void OlenGrid(string filepath, DataGridView excel)
+        public static void OpenGrid(string filepath, DataGridView excel)
         {
             using (StreamReader streamReader = new StreamReader(filepath))
             {
-                excel.ColumnCount = Convert.ToInt32(streamReader.ReadLine());
+                excel.ColumnCount = Convert.ToInt32(streamReader.ReadLine()); // створення таблиці
                 excel.RowCount = Convert.ToInt32(streamReader.ReadLine());
+
+                for (int i = 0; i < excel.ColumnCount; ++i)
+                    excel.Columns[i].HeaderText = _26Converter.ConvertTo26(i + 1);
+
+                for (int i = 0; i < excel.RowCount; ++i)
+                    excel.Rows[i].HeaderCell.Value = Convert.ToString(i + 1);
+
+                cells.Clear();
+
+                while(!streamReader.EndOfStream) // зчитуємо інформаціємо і записуємо її в cells
+                {
+                    string name = streamReader.ReadLine();
+                    string value = streamReader.ReadLine();
+                    string expression = streamReader.ReadLine();
+
+                    var position = _26Converter.Split(name);
+
+                    cells[name] = new Cell(name, position[0], position[1]);
+                    cells[name].Value = Convert.ToDouble(value);
+                    cells[name].RealExpression = expression;
+                }
+
+                ConnectCellsWithEachOther(excel);
             }
         }
 
+
+
+        private static void ConnectCellsWithEachOther (DataGridView excel) // відновляємо зв'язки між комірками та виводимо
+        {
+            foreach (Cell cell in cells.Values)
+            {
+                List<string> IDependOnCellsNames = FindDependencies(cell.RealExpression);
+
+                foreach (string name in IDependOnCellsNames)
+                {
+                    cell.CellsIDependOn.Add(cells[name]);
+                    cells[name].CellsDependentOnMe.Add(cell);
+                }
+            }
+
+            for (int i = 0; i < excel.ColumnCount; ++i) // виводимо всі ініціалізовані комірки
+            {
+                for (int j = 0; j < excel.RowCount; ++j)
+                {
+                    Cell cell = cells[_26Converter.ConvertTo26(i + 1) + (j + 1)];
+                    excel[i, j].Value = (cell.RealExpression == "")   ?   ""   :  cell.Value.ToString();
+                }
+            }
+        }
+
+
+        private static List<string> FindDependencies(string expression) // розбиваємо вираз та беремо комірки, від яких залежить наша
+        {
+            Regex regex = new Regex("[A-Z]+[0-9]+");
+            MatchCollection matchCollection = regex.Matches(expression); 
+
+            List<string> IDependOnCells = new List<string>();
+
+            foreach (var match in matchCollection)
+                IDependOnCells.Add(match.ToString());
+
+            return IDependOnCells;
+        }
     }
 }

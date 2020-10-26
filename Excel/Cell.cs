@@ -12,13 +12,21 @@ namespace Excel
         public string Name { get; private set; }
         public int Row { get; private set; }
         public int Column { get; private set; }
-        public string EvaluatingExpression { get; private set; }
-        public string RealExpression { get; private set; }
-        public double Value { get; private set; }
+
+        public string EvaluatingExpression;
+
+        public string RealExpression;
+
+        public double Value;
+
+
+        public List<Cell> CellsIDependOn { get; private set; } = new List<Cell>();
+
+        public List<Cell> CellsDependentOnMe { get; private set; } = new List<Cell>();
 
         public List<Cell> PossibleIDependOnCells { get; private set; } = new List<Cell>();
-        public List<Cell> CellsIDependOn { get; private set; } = new List<Cell>();
-        public List<Cell> CellsDependentOnMe { get; private set; } = new List<Cell>();
+
+        
 
 
         public Cell()

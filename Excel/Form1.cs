@@ -116,25 +116,12 @@ namespace Excel
 
         private void EvaluateButton_Click(object sender, EventArgs e)
         {
-            Cell _cell = GetSelectedCell();
-            List<Cell> cellsToBeChanged = _cell.SetCell(InputTexbox.Text); // змінюємо комірку і отримуємо List залежних від неї
+            Cell cell = GetSelectedCell();
+            var cellsToBeChanged  = cell.SetCell(InputTexbox.Text); // змінюємо комірку і отримуємо List залежних від неї
 
-            if (cellsToBeChanged != null) // якщо немає залежних комірок
-                ShowChangedCells(_cell.CellsDependentOnMe);
+            Grid.ShowDependentCells(cellsToBeChanged , Excel);
 
-            void ShowChangedCells(List<Cell> dependentCells)  // рекурсивно виводжу змінені залежні від залежних комірки
-            {
-                if (dependentCells.Count != 0)
-                {
-                    foreach (Cell cel in dependentCells)
-                    {
-                        Excel[cel.Column, cel.Row].Value = cel.Value;
-                        ShowChangedCells(cel.CellsDependentOnMe);
-                    }
-                }
-            }
-
-            Excel[_cell.Column, _cell.Row].Value = _cell.Value;
+            Excel[cell.Column, cell.Row].Value = cell.Value;
         }
 
 
@@ -184,7 +171,7 @@ namespace Excel
                 if (cell.CellsDependentOnMe.Count != 0)
                 {
                     OK = false;
-                    MessageBox.Show("You have dependencies. You cannot delete the row");
+                    MessageBox.Show("You have dependencies. You cannot delete the column");
                 }
             }
 
@@ -229,7 +216,7 @@ namespace Excel
             openFileDialog.RestoreDirectory = true;
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-                Grid.OlenGrid(openFileDialog.FileName, Excel);
+                Grid.OpenGrid(openFileDialog.FileName, Excel);
         }
 
 
