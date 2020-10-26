@@ -215,8 +215,16 @@ namespace Excel
             openFileDialog.Title = "Grid opening";
             openFileDialog.RestoreDirectory = true;
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-                Grid.OpenGrid(openFileDialog.FileName, Excel);
+
+            try
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    Grid.OpenGrid(openFileDialog.FileName, Excel);
+            }
+            catch 
+            {
+                MessageBox.Show("Something wrong with your file :c");
+            }
         }
 
 
