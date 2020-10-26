@@ -48,9 +48,7 @@ namespace Excel
         public List<Cell> SetCell (string expr)
         {
             PossibleIDependOnCells.Clear();
-
-            string temp = expr;
-            EvaluatingExpression = expr.Replace(" ", ""); // з виразу прибираємо всі пробіли
+            EvaluatingExpression = expr.Replace(" ", ""); // з виразу прибираємо всі пробіли            
             
             try 
             {
@@ -60,10 +58,9 @@ namespace Excel
                 if (CheckLoop()) // і тут
                     throw new MyExceptions.LoopException();
 
-                // Якщо не було exception, продовжуємо 
-                RealExpression = temp;
+                // Якщо не було exception ,  продовжуємо
+                RealExpression = expr;
                 Value = Convert.ToDouble(result);
-
                 return EditDependencies();
             }
 
@@ -91,7 +88,6 @@ namespace Excel
                 }
             }
 
-
             for (int i = 0; i < PossibleIDependOnCells.Count && !loop; ++i)
             {
                 Cell dependsOn = PossibleIDependOnCells[i];
@@ -112,27 +108,23 @@ namespace Excel
 
         private List<Cell> EditDependencies()
         {
-            foreach (Cell newCell in PossibleIDependOnCells)
+            foreach (Cell cell in CellsIDependOn)  // коли успішно змінився expression, у елементів виразу чистимо зв'язок з нашою
             {
-                foreach (Cell oldCell in CellsIDependOn)
-                {
-                    if (newCell != oldCell)
-                    {
-                        CellsIDependOn.Add(newCell); // додавання нових залежностей у змінювану комірку
-                    }
-                }
+                cell.CellsDependentOnMe.Remove(this); 
             }
+            CellsIDependOn.Clear();  // коли успішно змінився expression, чистимо залежность комірки від елементів виразу
 
 
-            foreach (Cell cell in PossibleIDependOnCells)
+            foreach (Cell newCell in PossibleIDependOnCells) // Possible вже не possible , а вже точно IDependOn
             {
-                cell.CellsDependentOnMe.Add(this); // додавання залежної комірки
+                CellsIDependOn.Add(newCell); // додавання нових залежностей у змінювану комірку    
+                newCell.CellsDependentOnMe.Add(this); // додавання залежної комірки
             }
 
 
             ChangeDependentCellsValues(CellsDependentOnMe);
 
-            void ChangeDependentCellsValues(List<Cell> dependentCells)  // рекурсивно змінюю залежності від заложнестей                     
+            void ChangeDependentCellsValues(List<Cell> dependentCells)  // рекурсивно змінюємо залежності від заложнестей                     
             { 
                 if (dependentCells.Count != 0)      
                 {

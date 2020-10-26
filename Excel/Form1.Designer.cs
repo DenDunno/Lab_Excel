@@ -39,6 +39,7 @@
             this.RemoveColumnButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.LoadButton = new System.Windows.Forms.Button();
+            this.ReadMeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Excel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,7 +66,7 @@
             // 
             // EvaluateButton
             // 
-            this.EvaluateButton.Location = new System.Drawing.Point(293, 25);
+            this.EvaluateButton.Location = new System.Drawing.Point(269, 24);
             this.EvaluateButton.Name = "EvaluateButton";
             this.EvaluateButton.Size = new System.Drawing.Size(101, 28);
             this.EvaluateButton.TabIndex = 2;
@@ -76,7 +77,7 @@
             // RowLable
             // 
             this.RowLable.AutoSize = true;
-            this.RowLable.Location = new System.Drawing.Point(453, 30);
+            this.RowLable.Location = new System.Drawing.Point(405, 26);
             this.RowLable.Name = "RowLable";
             this.RowLable.Size = new System.Drawing.Size(35, 17);
             this.RowLable.TabIndex = 3;
@@ -84,7 +85,7 @@
             // 
             // AddRowButton
             // 
-            this.AddRowButton.Location = new System.Drawing.Point(495, 30);
+            this.AddRowButton.Location = new System.Drawing.Point(447, 26);
             this.AddRowButton.Name = "AddRowButton";
             this.AddRowButton.Size = new System.Drawing.Size(42, 23);
             this.AddRowButton.TabIndex = 4;
@@ -94,7 +95,7 @@
             // 
             // RemoveRowButton
             // 
-            this.RemoveRowButton.Location = new System.Drawing.Point(543, 30);
+            this.RemoveRowButton.Location = new System.Drawing.Point(495, 26);
             this.RemoveRowButton.Name = "RemoveRowButton";
             this.RemoveRowButton.Size = new System.Drawing.Size(42, 23);
             this.RemoveRowButton.TabIndex = 4;
@@ -105,7 +106,7 @@
             // ColumnLable
             // 
             this.ColumnLable.AutoSize = true;
-            this.ColumnLable.Location = new System.Drawing.Point(609, 31);
+            this.ColumnLable.Location = new System.Drawing.Point(561, 27);
             this.ColumnLable.Name = "ColumnLable";
             this.ColumnLable.Size = new System.Drawing.Size(55, 17);
             this.ColumnLable.TabIndex = 3;
@@ -113,7 +114,7 @@
             // 
             // AddColumnButton
             // 
-            this.AddColumnButton.Location = new System.Drawing.Point(670, 30);
+            this.AddColumnButton.Location = new System.Drawing.Point(622, 26);
             this.AddColumnButton.Name = "AddColumnButton";
             this.AddColumnButton.Size = new System.Drawing.Size(42, 23);
             this.AddColumnButton.TabIndex = 4;
@@ -123,7 +124,7 @@
             // 
             // RemoveColumnButton
             // 
-            this.RemoveColumnButton.Location = new System.Drawing.Point(718, 30);
+            this.RemoveColumnButton.Location = new System.Drawing.Point(670, 26);
             this.RemoveColumnButton.Name = "RemoveColumnButton";
             this.RemoveColumnButton.Size = new System.Drawing.Size(42, 23);
             this.RemoveColumnButton.TabIndex = 4;
@@ -133,12 +134,13 @@
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(830, 25);
+            this.SaveButton.Location = new System.Drawing.Point(845, 24);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(75, 30);
             this.SaveButton.TabIndex = 5;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // LoadButton
             // 
@@ -148,6 +150,17 @@
             this.LoadButton.TabIndex = 5;
             this.LoadButton.Text = "Load";
             this.LoadButton.UseVisualStyleBackColor = true;
+            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+            // 
+            // ReadMeButton
+            // 
+            this.ReadMeButton.Location = new System.Drawing.Point(754, 25);
+            this.ReadMeButton.Name = "ReadMeButton";
+            this.ReadMeButton.Size = new System.Drawing.Size(85, 30);
+            this.ReadMeButton.TabIndex = 5;
+            this.ReadMeButton.Text = "Read me";
+            this.ReadMeButton.UseVisualStyleBackColor = true;
+            this.ReadMeButton.Click += new System.EventHandler(this.ReadMeButton_Click);
             // 
             // Form1
             // 
@@ -156,6 +169,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1013, 517);
             this.Controls.Add(this.LoadButton);
+            this.Controls.Add(this.ReadMeButton);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.RemoveColumnButton);
             this.Controls.Add(this.AddColumnButton);
@@ -187,6 +201,7 @@
         private System.Windows.Forms.Button RemoveColumnButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button LoadButton;
+        private System.Windows.Forms.Button ReadMeButton;
     }
 }
 

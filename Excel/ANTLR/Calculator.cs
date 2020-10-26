@@ -15,7 +15,6 @@ namespace Excel
         {
             expression = ReplaceExpression(expression);
 
-
             var lexer = new ExcelLexer(new AntlrInputStream(expression));
             lexer.RemoveErrorListeners();
             lexer.AddErrorListener(new ThrowExceptionErrorListener());
@@ -24,7 +23,6 @@ namespace Excel
             var parser = new ExcelParser(tokens);
             var tree = parser.compileUnit();
             var visitor = new ExcelVisitor();
-
 
             string result = Convert.ToString(visitor.Visit(tree));
 
