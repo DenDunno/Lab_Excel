@@ -142,7 +142,7 @@ namespace Excel
                 "addition = \"+\"\n" +
                 "subtruction = \"-\"\n" +
                 "multiplication = \"*\"\n" +
-                "dividing = \"-\"\n" +
+                "dividing = \"/\"\n" +
                 "div = \"div\"\n" +
                 "mod = \"mod\"\n" +
                 "find max of 2 numbers = max(x1,x2)\n" +
