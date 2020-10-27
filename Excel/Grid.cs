@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Excel
 {
-    class Grid
+    static class Grid
     {
         public static Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
 
