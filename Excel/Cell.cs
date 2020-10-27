@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Excel
 {
-    class Cell
+    public class Cell
     {
         public string Name { get; private set; }
         public int Row { get; private set; }
@@ -96,17 +96,24 @@ namespace Excel
                 }
             }
 
-            for (int i = 0; i < PossibleIDependOnCells.Count && !loop; ++i)
-            {
-                Cell dependsOn = PossibleIDependOnCells[i];
+            var IDependOn = PossibleIDependOnCells;
 
-                foreach (Cell dependsOnMe in CellsDependentOnMe)
+            CheckLoopInDependOnMeCells(CellsDependentOnMe);
+            // рекурсивно проходимось по дереву залежностей. Якщо комірка, від якої залежить наша == комірці, яка залежить від нашої, тоді є цикл
+            void CheckLoopInDependOnMeCells(List<Cell> dependOnMeCells) 
+            {
+                for (int i = 0; i < dependOnMeCells.Count && !loop; ++i)
                 {
-                    if (dependsOn == dependsOnMe) // Є цикл
+                    foreach (Cell IDependOnCell in IDependOn)
                     {
-                        loop = true;
-                        break;
+                        if (dependOnMeCells[i] == IDependOnCell)
+                        {
+                            loop = true;
+                            break;
+                        }
                     }
+
+                    CheckLoopInDependOnMeCells(dependOnMeCells[i].CellsDependentOnMe);
                 }
             }
 

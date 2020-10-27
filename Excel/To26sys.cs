@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Excel
 {
-    static class _26Converter
+    public static class _26Converter
     {
         private static int _26system = 26;
         private static int start = 64;     // 64 в ASCII це '@' , 65 = 'A' ,  66 = 'B' і так далі
@@ -40,14 +40,16 @@ namespace Excel
         {
             int answer = 0;
 
-            num26.Reverse();
+            char[] charArray = num26.ToCharArray();
+            Array.Reverse(charArray);
+            num26 = new string(charArray);
             
             for (int i = 0; i < num26.Count(); ++i)
             {
-                answer += (int)Math.Pow(_26system, i) * num26[i];
+                answer += (int)Math.Pow(_26system, i) * (num26[i] - start);
             }
 
-            return answer - start;
+            return answer;
         }
 
 

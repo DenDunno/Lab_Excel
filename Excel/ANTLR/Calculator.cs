@@ -8,7 +8,7 @@ using Antlr4.Runtime;
 
 namespace Excel
 {
-    static class Calculator
+    public static class Calculator
     {
         public static Cell changingCell;
         public static string Evaluate(string expression)

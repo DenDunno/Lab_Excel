@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Excel
 {
-    static class Grid
+    public static class Grid
     {
         public static Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
 
@@ -27,6 +27,7 @@ namespace Excel
                 }
             }
         }
+
 
         public static void DeleteCellsFromDictionary(bool deleteColumn, int columns, int rows)
         {
@@ -68,20 +69,23 @@ namespace Excel
 
         public static void OpenGrid(string filepath, DataGridView excel)
         {
-            using (StreamReader streamReader = new StreamReader(filepath))
+            StreamReader streamReader = null;
+
+            try
             {
-                excel.ColumnCount = Convert.ToInt32(streamReader.ReadLine()); // створення таблиці
-                excel.RowCount = Convert.ToInt32(streamReader.ReadLine());
+                streamReader = new StreamReader(filepath);
+            }
+            catch
+            {
+                MessageBox.Show("Something wrong with your file :c");
+                return;
+            }
 
-                for (int i = 0; i < excel.ColumnCount; ++i)
-                    excel.Columns[i].HeaderText = _26Converter.ConvertTo26(i + 1);
+            using (streamReader)
+            {
+                SetGrid(streamReader.ReadLine(), streamReader.ReadLine() , excel);
 
-                for (int i = 0; i < excel.RowCount; ++i)
-                    excel.Rows[i].HeaderCell.Value = Convert.ToString(i + 1);
-
-                cells.Clear();
-
-                while(!streamReader.EndOfStream) // зчитуємо інформаціємо і записуємо її в cells
+                while (!streamReader.EndOfStream) // зчитуємо інформаціємо і записуємо її в cells
                 {
                     string name = streamReader.ReadLine();
                     string value = streamReader.ReadLine();
@@ -89,13 +93,30 @@ namespace Excel
 
                     var position = _26Converter.Split(name);
 
-                    cells[name] = new Cell(name, position[0], position[1]);
+                    cells[name] = new Cell(name, --position[0], --position[1]); // position повертає по суті назву A1 (тобто 1,1). А справжня позиція 0 , 0
                     cells[name].Value = Convert.ToDouble(value);
                     cells[name].RealExpression = expression;
+                    cells[name].EvaluatingExpression = expression.Replace(" ", "");
                 }
 
                 ConnectCellsWithEachOther(excel);
             }
+        }
+
+
+
+        private static void SetGrid(string columns , string rows , DataGridView excel)
+        {
+            cells.Clear();
+
+            excel.ColumnCount = Convert.ToInt32(columns); // створення таблиці
+            excel.RowCount = Convert.ToInt32(rows);
+
+            for (int i = 0; i < excel.ColumnCount; ++i)
+                excel.Columns[i].HeaderText = _26Converter.ConvertTo26(i + 1);
+
+            for (int i = 0; i < excel.RowCount; ++i)
+                excel.Rows[i].HeaderCell.Value = Convert.ToString(i + 1);
         }
 
 

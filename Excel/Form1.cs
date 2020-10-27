@@ -159,7 +159,7 @@ namespace Excel
             Cell cell;
             string columnsName = removeColumn ? _26Converter.ConvertTo26(Excel.ColumnCount): "";
 
-            for (int i = 0; i < size; ++i)
+            for (int i = 0; i < size && OK; ++i)
             {
                 if (!removeColumn)
                 columnsName = _26Converter.ConvertTo26(i + 1);
@@ -216,15 +216,8 @@ namespace Excel
             openFileDialog.RestoreDirectory = true;
 
 
-            try
-            {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    Grid.OpenGrid(openFileDialog.FileName, Excel);
-            }
-            catch 
-            {
-                MessageBox.Show("Something wrong with your file :c");
-            }
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                Grid.OpenGrid(openFileDialog.FileName, Excel);
         }
 
 
