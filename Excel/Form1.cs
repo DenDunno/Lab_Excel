@@ -72,7 +72,7 @@ namespace Excel
         {
             if (Excel.RowCount > 1)
             {
-                RemoveColumnOrRow(false, Excel.ColumnCount);
+                if (RemoveColumnOrRow(false, Excel.ColumnCount)) // якщо немає залежностей, то все ок і видаляємо комірки з словника
                 Grid.DeleteCellsFromDictionary(false, Excel.ColumnCount, Excel.RowCount);
             }
         }
@@ -99,7 +99,7 @@ namespace Excel
         {
             if (Excel.ColumnCount > 1)
             {
-                RemoveColumnOrRow(true, Excel.RowCount);
+                if (RemoveColumnOrRow(true, Excel.RowCount)) // якщо немає залежностей, то все ок і видаляємо комірки з словника
                 Grid.DeleteCellsFromDictionary(true, Excel.ColumnCount, Excel.RowCount);
             }
         }
@@ -152,7 +152,7 @@ namespace Excel
 
 
 
-        private void RemoveColumnOrRow (bool removeColumn , int size)
+        private bool RemoveColumnOrRow (bool removeColumn , int size)
         {
             string fullName;
             bool OK = true;
@@ -183,6 +183,8 @@ namespace Excel
                 else
                     Excel.Rows.RemoveAt(Excel.RowCount - 1);
             }
+
+            return OK;
         }
 
 

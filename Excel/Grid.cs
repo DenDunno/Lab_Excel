@@ -41,7 +41,14 @@ namespace Excel
                 if (!deleteColumn)
                     columnsName = _26Converter.ConvertTo26(i + 1);
 
-                fullName = deleteColumn ? (columnsName + (i + 1)) : (columnsName + rows + 1);
+                fullName = deleteColumn ? (columnsName + (i + 1)) : (columnsName + (rows + 1));
+                Cell cell = cells[fullName];
+
+                foreach (Cell IDependOnCell in cell.CellsIDependOn) // чистимо залежності
+                    IDependOnCell.CellsDependentOnMe.Remove(cell);
+
+                foreach (Cell CelllDependOnMe in cell.CellsDependentOnMe)
+                    CelllDependOnMe.CellsIDependOn.Remove(cell);
 
                 cells.Remove(fullName);
             }
